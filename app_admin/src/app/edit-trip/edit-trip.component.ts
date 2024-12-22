@@ -13,22 +13,18 @@ import { Trip } from '../models/trip';
   styleUrl: './edit-trip.component.css'
 })
 export class EditTripComponent implements OnInit {
-  // Local variables
   public editForm!: FormGroup;
   trip!: Trip;
   submitted = false;
   message: string = '';
 
-  // Constructor to build the form and route the component
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
     private tripDataService: TripDataService
   ) {}
 
-  // ngOnInit method to handle the heavy lifting
   ngOnInit(): void {
-    // Retrieve stashed trip ID
     let tripCode = localStorage.getItem("tripCode");
     if (!tripCode) {
       alert("Something wrong, couldn’t find where I stashed tripCode!");
@@ -54,7 +50,6 @@ export class EditTripComponent implements OnInit {
     this.tripDataService.getTrip(tripCode).subscribe({
       next: (value: any) => {
         this.trip = value;
-        // Populate our record into the form
         this.editForm.patchValue(value[0]);
         if (!value) {
           this.message = 'No Trip Retrieved!';
@@ -69,7 +64,7 @@ export class EditTripComponent implements OnInit {
     });
   }
 
-  // Method executed when you commit the edit
+
   public onSubmit() {
     this.submitted = true;
     if (this.editForm.valid) {
@@ -85,7 +80,23 @@ export class EditTripComponent implements OnInit {
     }
   }
 
-  // Quick-access method to get at the form fields
+  public onDeleteTrip() {
+    const tripCode = this.editForm.value.code;  // Getting the tripCode from the form
+    if (tripCode) {
+      this.tripDataService.deleteTrip(tripCode).subscribe({
+        next: () => {
+          console.log('Trip deleted');
+          this.router.navigate(['']);  // Redirect after deletion
+        },
+        error: (error: any) => {
+          console.log('Error deleting trip:', error);
+        }
+      });
+    } else {
+      console.log('No trip code provided for deletion');
+    }
+  }
+
   get f() {
     return this.editForm.controls;
   }

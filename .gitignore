@@ -67,3 +67,8 @@ typings/
 !.vscode/launch.json
 !.vscode/extensions.json
 *.code-workspace
+
+# Dependency directory
+node_modules
+# Environment variables
+.env

@@ -3,8 +3,6 @@ const host = process.env.DB_HOST || '127.0.0.1';
 const dbURI = `mongodb://${host}/travlr`;
 const readLine = require('readline');
 
-// Build the connection string and set the connection timeout.
-// timeout is in milliseconds.
 const connect = () => {
   setTimeout(() => mongoose.connect(dbURI, {}), 1000);
 };
@@ -65,5 +63,6 @@ connect();
 
 // Import Mongoose schema
 require('./travlr');
+require('./user');
 
 module.exports = mongoose;
